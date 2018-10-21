@@ -1,0 +1,195 @@
+### What TypeScript Devs Can Learn From Reason
+
+_A Personal Story And A Couple Of Tips_
+
+---
+
+Hello! =)
+
+### Lucas Reis
+
+_Senior Front End Engineer @ Zocdoc_
+
+@iamlucasmreis
+
+---
+
+### My life as a front end developer: 
+
+I was always working on applications that were exploding with **complexity**, and looking at **other languages** for ideas, best practices, and inspirations
+
+---
+
+* Clojure / ClojureScript
+* Elm
+* F# / Fable
+* Erlang / Elixir
+* Reason
+
+Each with its own benefits and problems...
+
+---
+
+### Why isn't TypeScript there?
+
+Because TypeScript _feels_ different than these languages
+
+_(personal opinion, ok?)_
+
+---
+
+## TypeScript feels like writing better JavaScript
+
+---
+
+When working with one of the other languages and JS in the same project, it feels like working in **two different worlds** 
+
+---
+
+<< TWO RECORD EXAMPLES >>
+
+---
+
+### Reason is a world of compiler help that makes your code more correct and reliable
+
+Can we bring some learnings to our TypeScript code?
+
+---
+
+_Let's try! :)_
+
+---
+
+Reason is **immutable** by default
+
+---
+
+The greatest benefit is **Predictability**:
+
+<div style={{ fontSize: '1em', backgroundColor: 'rgba(0,0,0,0.1)', padding: 10 }}>“Mutation hides change, which create (unexpected) side effects, which can cause nasty bugs. When you enforce immutability you can keep your application architecture and mental model simple, which makes it easier to reason about your application”</div>
+
+<br />
+<br />
+<div style={{ fontSize: '.8em' }}>
+<a href="https://stackoverflow.com/questions/34385243/why-is-immutability-so-important-or-needed-in-javascript">
+https://stackoverflow.com/questions/34385243/why-is-immutability-so-important-or-needed-in-javascript
+</a>
+</div>
+
+---
+
+Get compiler help by using **const** and **readonly** as much as you can
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.8em' }}>
+{`// DON'T!
+
+interface MutablePerson {
+  profession: string;
+  name: string;
+}
+
+const person: MutablePerson = {
+  profession: "musician",
+  name: "Maurice"
+};
+
+function changeName(somePerson: MutablePerson) {
+  somePerson.name = "Verdine";
+  return somePerson;
+}`}
+</pre>
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.8em' }}>
+{`// DO!
+
+type Person = Readonly<MutablePerson>;
+
+const person: Person = {
+  profession: "musician",
+  name: "Maurice"
+};
+
+function changeName(somePerson: Person): Person {
+  return { ...somePerson, name: "Verdine" };
+}
+
+const newPerson = changeName(person);`}
+</pre>
+
+---
+
+<< "let a = 3" example >> 
+
+---
+
+### Reason has Variants
+
+Variants make it easier to make illegal states unrepresentable
+
+<div style={{ fontSize: '.8em' }}>
+<a href="https://blog.janestreet.com/effective-ml-revisited/">
+https://blog.janestreet.com/effective-ml-revisited/
+</a>
+</div>
+
+---
+
+<pre style={{ textAlign: 'initial'}}>
+{`interface CurrentUser {
+  
+  isLogged: boolean;
+  name: string;
+
+  isAuthenticated: boolean;
+  notificationsCount: number;
+}`}
+</pre>
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.6em' }}>
+{`function greetUser(user: CurrentUser) {
+  if (user.isAuthenticated) {
+    const { name, notificationsCount } = user;
+    return \`Hello \${name}! You have \${notificationsCount} unread notifications.\`;
+
+  } else if (user.isLogged) {
+    const { name } = user;
+    return \`Hello \${name}! Please enter your password to access your notifications.\`;
+
+  } else {
+    return "Hello! Please log in to access your notifications.";
+  }
+}`}
+</pre>
+---
+
+There are a lot of problems with that!
+
+How can we make sure we have **any** of those fields correctly?
+
+---
+
+xxx
+
+---
+
+Main lesson:
+
+## Don't try to fight your language!
+
+In the long term, you get more by embracing its idioms, and getting better at it.
+
+---
+
+BUT...
+
+A lot of times we can learn **awesome** stuff from a different language that we can bring back home! 
+
+---
+
+Let's start by "how does it feel to 
