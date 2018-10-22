@@ -22,8 +22,8 @@ I was always working on applications that were exploding with **complexity**, an
 
 * Clojure / ClojureScript
 * Elm
-* F# / Fable
 * Erlang / Elixir
+* F# / Fable
 * Reason
 
 Each with its own benefits and problems...
@@ -52,9 +52,9 @@ When working with one of the other languages and JS in the same project, it feel
 
 ### Reason is a world of compiler help that makes your code more correct and reliable
 
-Can we bring some learnings to our TypeScript code?
-
 ---
+
+Can we bring some learnings to our TypeScript code?
 
 _Let's try! :)_
 
@@ -77,6 +77,8 @@ https://stackoverflow.com/questions/34385243/why-is-immutability-so-important-or
 </div>
 
 ---
+
+In TypeScript: 
 
 Get compiler help by using **const** and **readonly** as much as you can
 
@@ -166,30 +168,118 @@ https://blog.janestreet.com/effective-ml-revisited/
   }
 }`}
 </pre>
+
 ---
 
 There are a lot of problems with that!
 
-How can we make sure we have **any** of those fields correctly?
+_How can we make sure we have **any** of those fields correctly?_
 
 ---
 
-xxx
+Let's implement this using Variants...
 
 ---
 
-Main lesson:
+<pre style={{ textAlign: 'initial' }}>
+{`type currentUser =
+  | NotLogged
+  | Logged(string)
+  | Authenticated(string, int);
+
+let user = Logged("Maurice");
+`}
+</pre>
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.8em' }}>
+{`type loggedUser = {name: string};
+
+type authenticatedUser = {
+  name: string,
+  notificationsCount: int,
+};
+
+type currentUser =
+  | NotLogged
+  | Logged(loggedUser)
+  | Authenticated(authenticatedUser);
+
+let user = Logged({name: "Verdine"});
+`}
+</pre>
+
+---
+
+We can have similar compiler help by using **Discriminated Unions**
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.8em'  }}>
+{`type CurrentUser =
+  | { type: "NOT_LOGGED" }
+  | {
+      type: "LOGGED";
+      name: string;
+    }
+  | {
+      type: "AUTHENTICATED";
+      name: string;
+      notificationsCount: number;
+    };
+
+const user: CurrentUser = {
+  type: "LOGGED",
+  name: "Maurice"
+};`}
+</pre>
+
+---
+
+<pre style={{ textAlign: 'initial', fontSize: '.8em'  }}>
+{`function greetUser(user: CurrentUser) {
+  switch (user.type) {
+    case "NOT_LOGGED":
+      return "Hello! Please log in to access your notifications.";
+
+    case "LOGGED":
+      return \`Hello \${
+        user.name
+      }! Please enter your password to access your notifications.\`;
+    
+    case "AUTHENTICATED":
+      return \`Hello \${user.name}! You have \${
+        user.notificationsCount
+      } unread notifications.\`;
+  }
+}`}
+</pre>
+
+---
+
+With those two practices, your code will be more **correct**, **predictable**, and **reliable**.
+
+---
+
+Conclusion 
+
+### There's a lot to learn from different languages!
+
+Dive in, the experience is at least interesting and at most enlightening
+
+---
+
+But let's remember:
 
 ## Don't try to fight your language!
 
-In the long term, you get more by embracing its idioms, and getting better at it.
+In the long term, you get more by embracing its idioms, and getting better at it
 
 ---
 
-BUT...
+Thanks!
 
-A lot of times we can learn **awesome** stuff from a different language that we can bring back home! 
+Lucas Reis
 
----
-
-Let's start by "how does it feel to 
+@iamlucasmreis
